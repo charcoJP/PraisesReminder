@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PraisesReminder</string>
+    <string name="praises_input_hint">褒める内容をメモしよう！</string>
 </resources>
