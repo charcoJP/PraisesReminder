@@ -3,8 +3,14 @@ package jp.co.charco.praisesreminder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import jp.co.charco.praisesreminder.data.db.entity.Praise
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+
+    // TODO: あとでDIに変更する
+    private val praiseDao by lazy { App.database.praiseDao() }
 
     private val _praisesInput = MutableLiveData<String>()
     val praisesInput: LiveData<String> = _praisesInput
@@ -22,11 +28,10 @@ class MainViewModel : ViewModel() {
         _enableSubmitButton.value = isLoginValid(input)
     }
 
-    fun submit() {
+    fun submit() = viewModelScope.launch {
         if (_enableSubmitButton.value == false) throw IllegalStateException("Input is invalid.")
 
-        // TODO: ひとまずStringにため込む
-        savedPraisesTexts.value += praisesInput.value + "\n"
+        praiseDao.save(Praise(content = praisesInput.value ?: ""))
         _praisesInput.value = ""
         _successSubmit.value = Unit
     }
