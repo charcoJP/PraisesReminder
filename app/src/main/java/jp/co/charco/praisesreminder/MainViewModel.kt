@@ -1,10 +1,8 @@
 package jp.co.charco.praisesreminder
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import jp.co.charco.praisesreminder.data.db.entity.Praise
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -21,7 +19,7 @@ class MainViewModel : ViewModel() {
     private val _successSubmit = MutableLiveData<Unit>()
     val successSubmit: LiveData<Unit> = _successSubmit
 
-    val savedPraisesTexts = MutableLiveData("")
+    val savedPraisesTexts = praiseDao.getAll().map { list -> list.map { it.content } }.asLiveData()
 
     fun praisesInputChanged(input: String) {
         _praisesInput.value = input
