@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.praisesInputChanged(it?.toString() ?: "")
         }
 
+        viewModel.savedPraisesTexts.observe(this) {
+            binding.text.text = it.joinToString(separator = "\n")
+        }
+
         viewModel.successSubmit.observe(this) {
             binding.prisesInput.clearFocus()
             val inputMethodManager = getSystemService<InputMethodManager>()
