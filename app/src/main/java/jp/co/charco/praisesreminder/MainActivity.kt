@@ -2,6 +2,7 @@ package jp.co.charco.praisesreminder
 
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -23,7 +24,12 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = PraiseListAdapter()
+        // TODO: SAM変換が効かない
+        val adapter = PraiseListAdapter(object : OnItemClickListener {
+            override fun onDeleteClick() {
+                // TODO: 削除処理
+            }
+        })
         binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener {
