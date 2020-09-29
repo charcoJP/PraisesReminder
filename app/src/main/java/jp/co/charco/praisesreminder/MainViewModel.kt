@@ -18,4 +18,8 @@ class MainViewModel : ViewModel() {
         praiseDao.save(Praise(content = input))
         _successSubmit.value = Unit
     }
+
+    fun delete(praise: Praise) = viewModelScope.launch {
+        praiseDao.delete(praise)
+    }
 }

@@ -10,7 +10,7 @@ import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ItemPraiseBinding
 
 interface OnItemClickListener {
-    fun onDeleteClick()
+    fun onDeleteClick(praise: Praise)
 }
 
 class PraiseListAdapter(
@@ -35,7 +35,7 @@ private class ViewHolder(private val binding: ItemPraiseBinding) :
         binding.more.setOnClickListener {
             PopupMenu(binding.root.context, binding.more).apply {
                 setOnMenuItemClickListener {
-                    if (it.itemId == R.id.delete) listener.onDeleteClick()
+                    if (it.itemId == R.id.delete) listener.onDeleteClick(praise)
                     return@setOnMenuItemClickListener true
                 }
                 menuInflater.inflate(R.menu.menu_praise_list_more, menu)
