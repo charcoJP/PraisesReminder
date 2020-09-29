@@ -22,12 +22,15 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val adapter = PraiseListAdapter()
+        binding.recyclerView.adapter = adapter
+
         binding.prisesInput.addTextChangedListener {
             viewModel.praisesInputChanged(it?.toString() ?: "")
         }
 
-        viewModel.savedPraisesTexts.observe(this) {
-            binding.text.text = it.joinToString(separator = "\n")
+        viewModel.savedPraises.observe(this) {
+            adapter.submitList(it)
         }
 
         viewModel.successSubmit.observe(this) {
