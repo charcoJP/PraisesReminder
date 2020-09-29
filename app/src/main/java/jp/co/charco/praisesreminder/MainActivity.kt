@@ -1,20 +1,21 @@
 package jp.co.charco.praisesreminder
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnInputSubmitListener {
 
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
+
+    private var bottomSheetFragment: BottomSheetDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         val adapter = PraiseListAdapter()
         binding.recyclerView.adapter = adapter
 
-        binding.prisesInput.addTextChangedListener {
-            viewModel.praisesInputChanged(it?.toString() ?: "")
+        binding.fab.setOnClickListener {
+            showInputBottomSheet()
         }
 
         viewModel.savedPraises.observe(this) {
@@ -34,9 +35,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.successSubmit.observe(this) {
-            binding.prisesInput.clearFocus()
+            dismissInputBottomSheet()
             val inputMethodManager = getSystemService<InputMethodManager>()
             inputMethodManager?.hideSoftInputFromWindow(binding.root.windowToken, 0)
         }
+    }
+
+    override fun onSubmit(input: String) {
+        viewModel.submit(input)
+    }
+
+    private fun showInputBottomSheet() {
+        bottomSheetFragment = PraiseInputBottomSheetFragment.newInstance()
+        bottomSheetFragment?.show(
+            supportFragmentManager,
+            PraiseInputBottomSheetFragment::class.simpleName
+        )
+    }
+
+    private fun dismissInputBottomSheet() {
+        bottomSheetFragment?.dismiss()
+        bottomSheetFragment = null
     }
 }

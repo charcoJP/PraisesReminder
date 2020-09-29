@@ -22,47 +22,22 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/textInputArea"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/textInputArea"
-            android:layout_width="0dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/input_content"
+            android:src="@drawable/ic_add_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/prises_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/praises_input_hint"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@{viewModel.praisesInput}" />
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="@{viewModel.enableSubmitButton}"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:minWidth="48dp"
-                android:onClick="@{() -> viewModel.submit()}"
-                android:padding="12dp"
-                app:icon="@drawable/ic_save_24px"
-                app:iconPadding="0dp"
-                app:iconSize="24dp" />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
