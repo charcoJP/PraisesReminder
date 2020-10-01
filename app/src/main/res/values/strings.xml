@@ -4,4 +4,5 @@
     <string name="input_content">内容の入力</string>
 
     <string name="delete">削除</string>
+    <string name="select_date">日を選択する</string>
 </resources>
