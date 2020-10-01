@@ -2,15 +2,17 @@ package jp.co.charco.praisesreminder
 
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity(), OnInputSubmitListener {
 
     private val viewModel: MainViewModel by viewModels()
@@ -37,6 +39,11 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
             showInputBottomSheet()
         }
 
+        binding.bottomAppBar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.select_date) showSelectDateDialog()
+            return@setOnMenuItemClickListener true
+        }
+
         viewModel.savedPraises.observe(this) {
             adapter.submitList(it)
         }
@@ -50,6 +57,19 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
 
     override fun onSubmit(input: String) {
         viewModel.submit(input)
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun showSelectDateDialog() {
+        MaterialDatePicker.Builder
+            .datePicker()
+            .setSelection(viewModel.currentEpochMilli)
+            .setTitleText(R.string.select_date_picker_title)
+            .build().apply {
+                addOnPositiveButtonClickListener { time: Long ->
+                    viewModel.changeDate(time)
+                }
+            }.show(supportFragmentManager, MaterialDatePicker::class.simpleName)
     }
 
     private fun showInputBottomSheet() {

@@ -5,4 +5,5 @@
 
     <string name="delete">削除</string>
     <string name="select_date">日を選択する</string>
+    <string name="select_date_picker_title">表示したい日を選択</string>
 </resources>
