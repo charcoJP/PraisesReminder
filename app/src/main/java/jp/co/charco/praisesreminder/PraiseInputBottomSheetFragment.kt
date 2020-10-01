@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.co.charco.praisesreminder.databinding.FragmetPraiseInputBottomSheetBinding
 
@@ -27,6 +28,8 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         if (context is OnInputSubmitListener) {
             listener = context as OnInputSubmitListener
         } else throw IllegalStateException()
+
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog)
     }
 
     override fun onCreateView(

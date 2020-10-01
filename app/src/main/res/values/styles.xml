@@ -20,4 +20,11 @@
         <item name="android:layout_height">48dp</item>
         <item name="cornerRadius">24dp</item>
     </style>
+
+    <!-- Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146 -->
+    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 </resources>
