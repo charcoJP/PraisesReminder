@@ -28,7 +28,7 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         if (context is OnInputSubmitListener) {
             listener = context as OnInputSubmitListener
         } else throw IllegalStateException()
-
+    // Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog)
     }
 
