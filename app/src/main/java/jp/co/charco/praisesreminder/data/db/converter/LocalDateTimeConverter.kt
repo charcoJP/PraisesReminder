@@ -1,9 +1,9 @@
-package jp.co.charco.praisesreminder.data.db
+package jp.co.charco.praisesreminder.data.db.converter
 
 import androidx.room.TypeConverter
 import java.time.*
 
-class Converters {
+class LocalDateTimeConverter {
     @TypeConverter
     fun fromTimestamp(value: Long?): LocalDateTime? {
         return value?.let {
