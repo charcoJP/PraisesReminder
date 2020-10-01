@@ -5,11 +5,14 @@ import jp.co.charco.praisesreminder.data.db.entity.Praise
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @ExperimentalCoroutinesApi
 class MainViewModel : ViewModel() {
@@ -26,6 +29,10 @@ class MainViewModel : ViewModel() {
 
     val savedPraises = currentLocalDateSubject.flatMapLatest {
         praiseDao.getAll(it)
+    }.asLiveData()
+
+    val currentDateStr: LiveData<String> = currentLocalDateSubject.mapLatest {
+        it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
     }.asLiveData()
 
     fun changeDate(epochMilli: Long) = viewModelScope.launch {
