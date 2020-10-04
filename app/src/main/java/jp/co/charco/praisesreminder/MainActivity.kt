@@ -28,9 +28,10 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = PraiseListAdapter {
-            viewModel.delete(it)
-        }
+        val adapter = PraiseListAdapter(
+            onItemClick = { /** TODO: 実装 **/ },
+            onDeleteClick = { viewModel.delete(it) },
+        )
         binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener {

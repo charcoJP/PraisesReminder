@@ -10,11 +10,16 @@ import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ItemPraiseBinding
 
 fun interface OnItemClickListener {
+    fun onItemClick(praise: Praise)
+}
+
+fun interface OnDeleteClickListener {
     fun onDeleteClick(praise: Praise)
 }
 
 class PraiseListAdapter(
-    private val listener: OnItemClickListener
+    private val onItemClick: OnItemClickListener,
+    private val onDeleteClick: OnDeleteClickListener
 ) : ListAdapter<Praise, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -24,24 +29,32 @@ class PraiseListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolder -> holder.bind(getItem(position), listener)
+            is ViewHolder -> holder.bind(getItem(position), onItemClick, onDeleteClick)
         }
     }
 }
 
 private class ViewHolder(private val binding: ItemPraiseBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(praise: Praise, listener: OnItemClickListener) {
+    fun bind(
+        praise: Praise,
+        itemClickListener: OnItemClickListener,
+        deleteClickListener: OnDeleteClickListener
+    ) {
         binding.more.setOnClickListener {
             PopupMenu(binding.root.context, binding.more).apply {
                 setOnMenuItemClickListener {
-                    if (it.itemId == R.id.delete) listener.onDeleteClick(praise)
+                    if (it.itemId == R.id.delete) deleteClickListener.onDeleteClick(praise)
                     return@setOnMenuItemClickListener true
                 }
                 menuInflater.inflate(R.menu.menu_praise_list_more, menu)
                 show()
             }
         }
+        binding.root.setOnClickListener {
+            itemClickListener.onItemClick(praise)
+        }
+
         binding.praise = praise
         binding.executePendingBindings()
     }
