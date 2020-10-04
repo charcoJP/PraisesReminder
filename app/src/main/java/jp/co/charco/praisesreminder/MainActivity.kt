@@ -8,9 +8,11 @@ import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@AndroidEntryPoint
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity(), OnInputSubmitListener {
 
