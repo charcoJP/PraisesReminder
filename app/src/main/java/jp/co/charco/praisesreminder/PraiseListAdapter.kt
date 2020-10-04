@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ItemPraiseBinding
 
-interface OnItemClickListener {
+fun interface OnItemClickListener {
     fun onDeleteClick(praise: Praise)
 }
 
