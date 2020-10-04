@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -28,13 +29,14 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = PraiseListAdapter {
-            viewModel.delete(it)
-        }
+        val adapter = PraiseListAdapter(
+            onItemClick = { showInputBottomSheet(it) },
+            onDeleteClick = { viewModel.delete(it) },
+        )
         binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener {
-            showInputBottomSheet()
+            showInputBottomSheet(Praise.empty())
         }
 
         binding.bottomAppBar.setOnMenuItemClickListener {
@@ -53,8 +55,8 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         }
     }
 
-    override fun onSubmit(input: String) {
-        viewModel.submit(input)
+    override fun onSubmit(praise: Praise) {
+        viewModel.submit(praise)
     }
 
     @ExperimentalCoroutinesApi
@@ -70,8 +72,8 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
             }.show(supportFragmentManager, MaterialDatePicker::class.simpleName)
     }
 
-    private fun showInputBottomSheet() {
-        bottomSheetFragment = PraiseInputBottomSheetFragment.newInstance()
+    private fun showInputBottomSheet(praise: Praise) {
+        bottomSheetFragment = PraiseInputBottomSheetFragment.newInstance(praise)
         bottomSheetFragment?.show(
             supportFragmentManager,
             PraiseInputBottomSheetFragment::class.simpleName

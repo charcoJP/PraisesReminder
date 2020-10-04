@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="praise"
+            type="jp.co.charco.praisesreminder.data.db.entity.Praise" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,9 +22,19 @@
             android:hint="@string/praises_input_hint"
             android:importantForAutofill="no"
             android:inputType="text"
+            android:text="@={praise.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/calendar"
+            style="@style/IconButton"
+            android:layout_gravity="center_vertical"
+            app:icon="@drawable/ic_calendar_today_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/prises_input" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/submit"

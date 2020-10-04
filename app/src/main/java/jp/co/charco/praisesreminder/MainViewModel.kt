@@ -42,8 +42,8 @@ class MainViewModel @ViewModelInject constructor(
             .toLocalDate()
     }
 
-    fun submit(input: String) = viewModelScope.launch {
-        praiseDao.save(Praise(content = input))
+    fun submit(praise: Praise) = viewModelScope.launch {
+        praiseDao.save(praise)
         _successSubmit.value = Unit
     }
 

@@ -11,10 +11,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
+import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.FragmetPraiseInputBottomSheetBinding
+import jp.co.charco.praisesreminder.util.toUtcEpochMilli
+import jp.co.charco.praisesreminder.util.toUtcLocalDate
 
 interface OnInputSubmitListener {
-    fun onSubmit(input: String)
+    fun onSubmit(praise: Praise)
 }
 
 class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
@@ -22,13 +26,17 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var listener: OnInputSubmitListener
 
+    private val praise: Praise by lazy {
+        arguments?.getParcelable<Praise>(KEY_PRAISE) ?: throw IllegalStateException()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (context is OnInputSubmitListener) {
             listener = context as OnInputSubmitListener
         } else throw IllegalStateException()
-    // Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146
+        // Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog)
     }
 
@@ -36,13 +44,15 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragmet_praise_input_bottom_sheet,
             container,
             false
         )
+        binding.praise = praise
+
         return binding.root
     }
 
@@ -53,8 +63,12 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
             binding.submit.isEnabled = it?.isNotBlank() == true
         }
 
+        binding.calendar.setOnClickListener {
+            showSelectDateDialog()
+        }
+
         binding.submit.setOnClickListener {
-            listener.onSubmit(binding.prisesInput.text.toString())
+            listener.onSubmit(praise)
         }
 
         binding.prisesInput.requestFocus()
@@ -69,7 +83,26 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         super.onDismiss(dialog)
     }
 
+    private fun showSelectDateDialog() {
+        MaterialDatePicker.Builder
+            .datePicker()
+            .setSelection(praise.date.toUtcEpochMilli())
+            .setTitleText(R.string.select_date_picker_title_for_edit)
+            .build().apply {
+                addOnPositiveButtonClickListener { time: Long ->
+                    praise.date = time.toUtcLocalDate()
+                }
+            }.show(childFragmentManager, MaterialDatePicker::class.simpleName)
+    }
+
     companion object {
-        fun newInstance() = PraiseInputBottomSheetFragment()
+        private const val KEY_PRAISE = "KEY_PRAISE"
+
+        fun newInstance(praise: Praise) =
+            PraiseInputBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(KEY_PRAISE, praise)
+                }
+            }
     }
 }
