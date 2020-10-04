@@ -8,7 +8,6 @@ import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
-import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,12 +26,9 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        // TODO: SAM変換が効かない
-        val adapter = PraiseListAdapter(object : OnItemClickListener {
-            override fun onDeleteClick(praise: Praise) {
-                viewModel.delete(praise)
-            }
-        })
+        val adapter = PraiseListAdapter {
+            viewModel.delete(it)
+        }
         binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener {
