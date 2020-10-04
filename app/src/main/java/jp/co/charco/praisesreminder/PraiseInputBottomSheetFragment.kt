@@ -11,10 +11,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.FragmetPraiseInputBottomSheetBinding
 
 interface OnInputSubmitListener {
-    fun onSubmit(input: String)
+    fun onSubmit(praise: Praise)
 }
 
 class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
@@ -22,7 +23,9 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var listener: OnInputSubmitListener
 
-    private val initialContent: String by lazy { arguments?.getString(KEY_CONTENT) ?: "" }
+    private val praise: Praise by lazy {
+        arguments?.getParcelable<Praise>(KEY_PRAISE) ?: throw IllegalStateException()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +48,8 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
             container,
             false
         )
-        binding.prisesInput.setText(initialContent)
+        binding.praise = praise
+
         return binding.root
     }
 
@@ -57,7 +61,7 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.submit.setOnClickListener {
-            listener.onSubmit(binding.prisesInput.text.toString())
+            listener.onSubmit(praise)
         }
 
         binding.prisesInput.requestFocus()
@@ -73,12 +77,12 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val KEY_CONTENT = "KEY_CONTENT"
+        private const val KEY_PRAISE = "KEY_PRAISE"
 
-        fun newInstance(content: String = "") =
+        fun newInstance(praise: Praise) =
             PraiseInputBottomSheetFragment().apply {
                 arguments = Bundle().apply {
-                    putString(KEY_CONTENT, content)
+                    putParcelable(KEY_PRAISE, praise)
                 }
             }
     }
