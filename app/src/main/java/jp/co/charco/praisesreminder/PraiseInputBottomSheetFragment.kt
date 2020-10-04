@@ -22,13 +22,15 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var listener: OnInputSubmitListener
 
+    private val initialContent: String by lazy { arguments?.getString(KEY_CONTENT) ?: "" }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (context is OnInputSubmitListener) {
             listener = context as OnInputSubmitListener
         } else throw IllegalStateException()
-    // Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146
+        // Keyboard で BottomSheet 隠れる問題の回避策 https://stackoverflow.com/a/50948146
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog)
     }
 
@@ -36,13 +38,14 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragmet_praise_input_bottom_sheet,
             container,
             false
         )
+        binding.prisesInput.setText(initialContent)
         return binding.root
     }
 
@@ -70,6 +73,13 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance() = PraiseInputBottomSheetFragment()
+        private const val KEY_CONTENT = "KEY_CONTENT"
+
+        fun newInstance(content: String = "") =
+            PraiseInputBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putString(KEY_CONTENT, content)
+                }
+            }
     }
 }
