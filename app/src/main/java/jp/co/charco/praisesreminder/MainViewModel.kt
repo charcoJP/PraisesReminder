@@ -1,6 +1,8 @@
 package jp.co.charco.praisesreminder
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import jp.co.charco.praisesreminder.data.db.PraiseDao
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,10 +17,9 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 @ExperimentalCoroutinesApi
-class MainViewModel : ViewModel() {
-
-    // TODO: あとでDIに変更する
-    private val praiseDao by lazy { App.database.praiseDao() }
+class MainViewModel @ViewModelInject constructor(
+    private val praiseDao: PraiseDao
+) : ViewModel() {
 
     private val _successSubmit = MutableLiveData<Unit>()
     val successSubmit: LiveData<Unit> = _successSubmit
