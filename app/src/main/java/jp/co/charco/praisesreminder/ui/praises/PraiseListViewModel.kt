@@ -1,4 +1,4 @@
-package jp.co.charco.praisesreminder
+package jp.co.charco.praisesreminder.ui.praises
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 @ExperimentalCoroutinesApi
-class MainViewModel @ViewModelInject constructor(
+class PraiseListViewModel @ViewModelInject constructor(
     private val praiseDao: PraiseDao
 ) : ViewModel() {
 
