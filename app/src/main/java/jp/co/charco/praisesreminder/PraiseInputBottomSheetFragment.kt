@@ -11,8 +11,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.FragmetPraiseInputBottomSheetBinding
+import jp.co.charco.praisesreminder.util.toUtcEpochMilli
+import jp.co.charco.praisesreminder.util.toUtcLocalDate
 
 interface OnInputSubmitListener {
     fun onSubmit(praise: Praise)
@@ -60,6 +63,10 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
             binding.submit.isEnabled = it?.isNotBlank() == true
         }
 
+        binding.calendar.setOnClickListener {
+            showSelectDateDialog()
+        }
+
         binding.submit.setOnClickListener {
             listener.onSubmit(praise)
         }
@@ -74,6 +81,18 @@ class PraiseInputBottomSheetFragment : BottomSheetDialogFragment() {
         inputMethodManager?.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0)
 
         super.onDismiss(dialog)
+    }
+
+    private fun showSelectDateDialog() {
+        MaterialDatePicker.Builder
+            .datePicker()
+            .setSelection(praise.date.toUtcEpochMilli())
+            .setTitleText(R.string.select_date_picker_title_for_edit)
+            .build().apply {
+                addOnPositiveButtonClickListener { time: Long ->
+                    praise.date = time.toUtcLocalDate()
+                }
+            }.show(childFragmentManager, MaterialDatePicker::class.simpleName)
     }
 
     companion object {

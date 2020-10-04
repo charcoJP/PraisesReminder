@@ -17,7 +17,7 @@ data class Praise(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var content: String,
-    val date: LocalDate = LocalDate.now(),
+    var date: LocalDate = LocalDate.now(),
     // TODO: insert するタイミングの now を利用したい
     @ColumnInfo(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now()
