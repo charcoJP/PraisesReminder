@@ -1,4 +1,4 @@
-package jp.co.charco.praisesreminder
+package jp.co.charco.praisesreminder.ui.praises
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import jp.co.charco.praisesreminder.R
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ItemPraiseBinding
 
