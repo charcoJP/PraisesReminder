@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import jp.co.charco.praisesreminder.MainActivity
 
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -17,10 +18,11 @@ class AlarmReceiver : BroadcastReceiver() {
             if (it == INVALID_REQUEST_CODE) throw IllegalStateException("Request Code is empty.")
         }
 
+        val openIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
             requestCode,
-            intent,
+            openIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         val notificationManager =
