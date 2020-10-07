@@ -3,6 +3,7 @@
     <string name="praises_input_hint">褒める内容をメモしよう！</string>
     <string name="input_content">内容の入力</string>
 
+    <string name="request_input_form">ご要望入力フォーム</string>
     <string name="delete">削除</string>
     <string name="select_date">日を選択する</string>
     <string name="select_date_picker_title">表示したい日を選択</string>
