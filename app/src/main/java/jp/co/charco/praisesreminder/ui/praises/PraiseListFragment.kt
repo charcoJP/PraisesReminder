@@ -1,10 +1,13 @@
 package jp.co.charco.praisesreminder.ui.praises
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -59,6 +62,16 @@ class PraiseListFragment : Fragment(), OnInputSubmitListener {
             return@setOnMenuItemClickListener true
         }
 
+        binding.bottomAppBar.setNavigationOnClickListener {
+            PopupMenu(requireContext(), it).apply {
+                setOnMenuItemClickListener {
+                    showRequestInputForm()
+                    return@setOnMenuItemClickListener true
+                }
+                menuInflater.inflate(R.menu.menu_bottom_app_bar_popup, menu)
+            }.show()
+        }
+
         viewModel.savedPraises.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
@@ -98,5 +111,10 @@ class PraiseListFragment : Fragment(), OnInputSubmitListener {
     private fun dismissInputBottomSheet() {
         bottomSheetFragment?.dismiss()
         bottomSheetFragment = null
+    }
+
+    private fun showRequestInputForm() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/NuT4uFDjSxmxEWg2A"))
+        startActivity(intent)
     }
 }
