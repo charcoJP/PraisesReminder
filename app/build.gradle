@@ -32,6 +32,12 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('debug.keystore')
+        }
+    }
+
     dataBinding{
         enabled = true
     }
