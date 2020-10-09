@@ -33,7 +33,7 @@ class PraiseListViewModel @ViewModelInject constructor(
     }.asLiveData()
 
     val currentDateStr: LiveData<String> = currentLocalDateSubject.mapLatest {
-        it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd (E)"))
     }.asLiveData()
 
     fun changeDate(epochMilli: Long) = viewModelScope.launch {
