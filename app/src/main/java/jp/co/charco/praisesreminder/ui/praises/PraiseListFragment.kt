@@ -117,4 +117,14 @@ class PraiseListFragment : Fragment(), OnInputSubmitListener {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/NuT4uFDjSxmxEWg2A"))
         startActivity(intent)
     }
+
+    companion object {
+        const val KEY_ADDITIONAL_DATE = "KEY_ADDITIONAL_DATE"
+
+        fun newInstance(additionalDate: Int) = PraiseListFragment().apply {
+            arguments = Bundle().apply {
+                putLong(KEY_ADDITIONAL_DATE, additionalDate.toLong())
+            }
+        }
+    }
 }
