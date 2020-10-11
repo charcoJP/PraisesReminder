@@ -1,5 +1,6 @@
 package jp.co.charco.praisesreminder.ui.praises
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import jp.co.charco.praisesreminder.data.db.PraiseDao
@@ -14,17 +15,20 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @ExperimentalCoroutinesApi
 class PraiseListViewModel @ViewModelInject constructor(
-    private val praiseDao: PraiseDao
+    private val praiseDao: PraiseDao,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val additionalDate: Long
+        get() = savedStateHandle.get<Long>(PraiseListFragment.KEY_ADDITIONAL_DATE) ?: 0
 
     private val _successSubmit = MutableLiveData<Unit>()
     val successSubmit: LiveData<Unit> = _successSubmit
 
-    private val currentLocalDateSubject = MutableStateFlow(LocalDate.now())
+    private val currentLocalDateSubject = MutableStateFlow(LocalDate.now().plusDays(additionalDate))
     val currentEpochMilli: Long
         get() = currentLocalDateSubject.value.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
 
