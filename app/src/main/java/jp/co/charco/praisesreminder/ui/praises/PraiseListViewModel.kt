@@ -2,19 +2,17 @@ package jp.co.charco.praisesreminder.ui.praises
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import jp.co.charco.praisesreminder.data.db.PraiseDao
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 @ExperimentalCoroutinesApi
 class PraiseListViewModel @ViewModelInject constructor(
@@ -25,31 +23,11 @@ class PraiseListViewModel @ViewModelInject constructor(
     private val additionalDate: Long
         get() = savedStateHandle.get<Long>(PraiseListFragment.KEY_ADDITIONAL_DATE) ?: 0
 
-    private val _successSubmit = MutableLiveData<Unit>()
-    val successSubmit: LiveData<Unit> = _successSubmit
-
     private val currentLocalDateSubject = MutableStateFlow(LocalDate.now().plusDays(additionalDate))
-    val currentEpochMilli: Long
-        get() = currentLocalDateSubject.value.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
 
     val savedPraises = currentLocalDateSubject.flatMapLatest {
         praiseDao.getAll(it)
     }.asLiveData()
-
-    val currentDateStr: LiveData<String> = currentLocalDateSubject.mapLatest {
-        it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd (E)"))
-    }.asLiveData()
-
-    fun changeDate(epochMilli: Long) = viewModelScope.launch {
-        currentLocalDateSubject.value = Instant.ofEpochMilli(epochMilli)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-    }
-
-    fun submit(praise: Praise) = viewModelScope.launch {
-        praiseDao.save(praise)
-        _successSubmit.value = Unit
-    }
 
     fun delete(praise: Praise) = viewModelScope.launch {
         praiseDao.delete(praise)
