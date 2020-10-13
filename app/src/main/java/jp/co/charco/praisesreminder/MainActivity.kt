@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         })
 
         binding.fab.setOnClickListener {
-            showInputBottomSheet(Praise.empty())
+            showInputBottomSheet(Praise(date = viewModel.currentDate, content = ""))
         }
 
         binding.bottomAppBar.setOnMenuItemClickListener {

@@ -32,6 +32,8 @@ class MainViewModel @ViewModelInject constructor(
     private val _changePageEvent = MutableLiveData<Event<Int>>()
     val changePageEvent: LiveData<Event<Int>> = _changePageEvent
 
+    val currentDate: LocalDate
+        get() = currentLocalDateSubject.value
     val currentDateStr: LiveData<String> = currentLocalDateSubject.mapLatest {
         it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd (E)"))
     }.asLiveData()
