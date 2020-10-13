@@ -14,6 +14,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @ExperimentalCoroutinesApi
 class MainViewModel @ViewModelInject constructor(
@@ -28,6 +29,11 @@ class MainViewModel @ViewModelInject constructor(
     private val _successSubmit = MutableLiveData<Event<Unit>>()
     val successSubmit: LiveData<Event<Unit>> = _successSubmit
 
+    private val _changePageEvent = MutableLiveData<Event<Int>>()
+    val changePageEvent: LiveData<Event<Int>> = _changePageEvent
+
+    val currentDate: LocalDate
+        get() = currentLocalDateSubject.value
     val currentDateStr: LiveData<String> = currentLocalDateSubject.mapLatest {
         it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd (E)"))
     }.asLiveData()
@@ -40,9 +46,16 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun changeDate(epochMilli: Long) = viewModelScope.launch {
-        currentLocalDateSubject.value = Instant.ofEpochMilli(epochMilli)
+        val oldDate = currentLocalDateSubject.value
+        val newDate = Instant.ofEpochMilli(epochMilli)
             .atZone(ZoneId.systemDefault())
             .toLocalDate()
+        currentLocalDateSubject.value = newDate
+
+        // pagerのPageを同期させる
+        val long = ChronoUnit.DAYS.between(oldDate, newDate)
+        val intt = long.toInt()
+        _changePageEvent.value = Event(intt)
     }
 
     fun submit(praise: Praise) = viewModelScope.launch {

@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         })
 
         binding.fab.setOnClickListener {
-            showInputBottomSheet(Praise.empty())
+            showInputBottomSheet(Praise(date = viewModel.currentDate, content = ""))
         }
 
         binding.bottomAppBar.setOnMenuItemClickListener {
@@ -77,6 +77,11 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
 
         viewModel.showInputBottomSheet.observe(this, EventObserver {
             showInputBottomSheet(it)
+        })
+
+        viewModel.changePageEvent.observe(this, EventObserver {
+            val currentPosition = binding.viewPager.currentItem
+            binding.viewPager.setCurrentItem(currentPosition + it, true)
         })
     }
 
