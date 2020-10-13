@@ -78,6 +78,11 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
         viewModel.showInputBottomSheet.observe(this, EventObserver {
             showInputBottomSheet(it)
         })
+
+        viewModel.changePageEvent.observe(this, EventObserver {
+            val currentPosition = binding.viewPager.currentItem
+            binding.viewPager.setCurrentItem(currentPosition + it, true)
+        })
     }
 
     override fun onSubmit(praise: Praise) {
