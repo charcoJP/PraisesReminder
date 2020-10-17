@@ -7,6 +7,9 @@ import java.time.LocalDate
 
 @Dao
 interface PraiseDao {
+    @Query("SELECT * FROM praise")
+    suspend fun getAll(): List<Praise>
+
     @Query("SELECT * FROM praise WHERE date = :date")
     suspend fun getAll(date: LocalDate): List<Praise>
 

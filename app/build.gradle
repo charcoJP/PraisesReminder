@@ -59,6 +59,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    // Tells our androidTest project where to find the schema
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
 }
 
 dependencies {
@@ -104,5 +109,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     testImplementation "androidx.arch.core:core-testing:$arch_version"
-    testImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
 }
