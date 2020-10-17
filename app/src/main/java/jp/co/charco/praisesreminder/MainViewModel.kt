@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.data.repository.PraiseRepository
 import jp.co.charco.praisesreminder.util.Event
+import jp.co.charco.praisesreminder.util.singleLiveData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapLatest
@@ -26,8 +27,8 @@ class MainViewModel @ViewModelInject constructor(
         get() = currentLocalDateSubject.value.atStartOfDay().toInstant(ZoneOffset.UTC)
             .toEpochMilli()
 
-    private val _successSubmit = MutableLiveData<Event<Unit>>()
-    val successSubmit: LiveData<Event<Unit>> = _successSubmit
+    private val _successSubmit = singleLiveData<Unit>()
+    val successSubmit: LiveData<Unit> = _successSubmit
 
     private val _changePageEvent = MutableLiveData<Event<Int>>()
     val changePageEvent: LiveData<Event<Int>> = _changePageEvent
@@ -60,7 +61,7 @@ class MainViewModel @ViewModelInject constructor(
 
     fun submit(praise: Praise) = viewModelScope.launch {
         praiseRepository.save(praise)
-        _successSubmit.value = Event(Unit)
+        _successSubmit.value = Unit
     }
 
     fun showInputBottomSheet(praise: Praise) {

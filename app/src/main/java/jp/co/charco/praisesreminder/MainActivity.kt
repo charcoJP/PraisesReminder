@@ -20,6 +20,7 @@ import jp.co.charco.praisesreminder.data.db.entity.Praise
 import jp.co.charco.praisesreminder.databinding.ActivityMainBinding
 import jp.co.charco.praisesreminder.ui.praises.PraiseListFragment
 import jp.co.charco.praisesreminder.util.EventObserver
+import jp.co.charco.praisesreminder.util.observeSingle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -69,11 +70,11 @@ class MainActivity : AppCompatActivity(), OnInputSubmitListener {
             }.show()
         }
 
-        viewModel.successSubmit.observe(this, EventObserver {
+        viewModel.successSubmit.observeSingle(this) {
             dismissInputBottomSheet()
             val inputMethodManager = getSystemService<InputMethodManager>()
             inputMethodManager?.hideSoftInputFromWindow(binding.root.windowToken, 0)
-        })
+        }
 
         viewModel.showInputBottomSheet.observe(this, EventObserver {
             showInputBottomSheet(it)
