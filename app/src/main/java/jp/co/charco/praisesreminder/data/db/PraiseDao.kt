@@ -10,7 +10,7 @@ interface PraiseDao {
     @Query("SELECT * FROM praise")
     suspend fun getAll(): List<Praise>
 
-    @Query("SELECT * FROM praise WHERE date = :date")
+    @Query("SELECT * FROM praise WHERE date = :date ORDER BY order_no")
     suspend fun getAll(date: LocalDate): List<Praise>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
