@@ -2,8 +2,8 @@ package jp.co.charco.praisesreminder
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import jp.co.charco.praisesreminder.data.db.PraiseDao
 import jp.co.charco.praisesreminder.data.db.entity.Praise
+import jp.co.charco.praisesreminder.data.repository.PraiseRepository
 import jp.co.charco.praisesreminder.util.Event
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit
 
 @ExperimentalCoroutinesApi
 class MainViewModel @ViewModelInject constructor(
-    private val praiseDao: PraiseDao
+    private val praiseRepository: PraiseRepository
 ) : ViewModel() {
     private val now = LocalDate.now()
     private val currentLocalDateSubject = MutableStateFlow(now)
@@ -59,7 +59,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun submit(praise: Praise) = viewModelScope.launch {
-        praiseDao.save(praise)
+        praiseRepository.save(praise)
         _successSubmit.value = Event(Unit)
     }
 

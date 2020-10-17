@@ -18,4 +18,7 @@ interface PraiseDao {
 
     @Delete
     suspend fun delete(entity: Praise)
+
+    @Query("SELECT MAX(`order_no`) FROM praise WHERE date = :date")
+    suspend fun getMaxOrder(date: LocalDate): Int
 }

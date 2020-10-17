@@ -12,6 +12,12 @@ class PraiseRepository @Inject constructor(private val praiseDao: PraiseDao) {
         emit(result)
     }
 
+    suspend fun save(praise: Praise) {
+        val orderNo = praiseDao.getMaxOrder(praise.date) + 1
+        praise.orderNo = orderNo
+        praiseDao.save(praise)
+    }
+
     suspend fun delete(praise: Praise) {
         return praiseDao.delete(praise)
     }

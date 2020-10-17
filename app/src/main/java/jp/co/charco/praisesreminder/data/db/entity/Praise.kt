@@ -19,7 +19,7 @@ data class Praise(
     var content: String,
     var date: LocalDate = LocalDate.now(),
     @ColumnInfo(name = "order_no", defaultValue = UNDECIDED_VALUE.toString())
-    val orderNo: Int = UNDECIDED_VALUE,
+    var orderNo: Int = UNDECIDED_VALUE,
     // TODO: insert するタイミングの now を利用したい
     @ColumnInfo(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now()
