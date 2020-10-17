@@ -6,8 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import jp.co.charco.praisesreminder.data.db.PraiseDao
 import jp.co.charco.praisesreminder.data.db.entity.Praise
+import jp.co.charco.praisesreminder.data.repository.PraiseRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -16,7 +16,7 @@ import java.time.LocalDate
 
 @ExperimentalCoroutinesApi
 class PraiseListViewModel @ViewModelInject constructor(
-    private val praiseDao: PraiseDao,
+    private val praiseRepository: PraiseRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -26,10 +26,10 @@ class PraiseListViewModel @ViewModelInject constructor(
     private val currentLocalDateSubject = MutableStateFlow(LocalDate.now().plusDays(additionalDate))
 
     val savedPraises = currentLocalDateSubject.flatMapLatest {
-        praiseDao.getAll(it)
+        praiseRepository.getPraises(it)
     }.asLiveData()
 
     fun delete(praise: Praise) = viewModelScope.launch {
-        praiseDao.delete(praise)
+        praiseRepository.delete(praise)
     }
 }

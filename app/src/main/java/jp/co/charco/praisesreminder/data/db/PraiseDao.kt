@@ -8,7 +8,7 @@ import java.time.LocalDate
 @Dao
 interface PraiseDao {
     @Query("SELECT * FROM praise WHERE date = :date")
-    fun getAll(date: LocalDate): Flow<List<Praise>>
+    suspend fun getAll(date: LocalDate): List<Praise>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(entity: Praise)
