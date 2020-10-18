@@ -13,9 +13,18 @@ class PraiseRepository @Inject constructor(private val praiseDao: PraiseDao) {
     }
 
     suspend fun save(praise: Praise) {
-        val orderNo = praiseDao.getMaxOrder(praise.date) + 1
+        val orderNo = (praiseDao.getMaxOrder(praise.date) ?: 0) + 1
         praise.orderNo = orderNo
         praiseDao.save(praise)
+    }
+
+    suspend fun updateOrders(mutableList: MutableList<Praise>) {
+        // TODO: 件数が少ないので current の日付分、すべて order を付け直す
+        mutableList.forEachIndexed { index, praise ->
+            praise.orderNo = index + 1
+
+            praiseDao.update(praise)
+        }
     }
 
     suspend fun delete(praise: Praise) {
