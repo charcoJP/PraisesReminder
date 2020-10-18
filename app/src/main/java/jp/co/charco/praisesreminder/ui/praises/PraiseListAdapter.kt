@@ -33,6 +33,15 @@ class PraiseListAdapter(
             is ViewHolder -> holder.bind(getItem(position), onItemClick, onDeleteClick)
         }
     }
+
+    fun moveItem(from: Int, to: Int): MutableList<Praise> {
+        val list = currentList.toMutableList()
+        val tmp = list[to]
+        list[to] = list[from]
+        list[from] = tmp
+        submitList(list)
+        return list
+    }
 }
 
 private class ViewHolder(private val binding: ItemPraiseBinding) :
@@ -62,9 +71,11 @@ private class ViewHolder(private val binding: ItemPraiseBinding) :
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<Praise>() {
-    override fun areItemsTheSame(oldItem: Praise, newItem: Praise): Boolean = oldItem == newItem
+    override fun areItemsTheSame(oldItem: Praise, newItem: Praise): Boolean {
+        return oldItem.id == newItem.id
+    }
 
     override fun areContentsTheSame(oldItem: Praise, newItem: Praise): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 }

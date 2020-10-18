@@ -16,34 +16,21 @@
 
 package jp.co.charco.praisesreminder.di
 
-import android.app.Application
-import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.co.charco.praisesreminder.data.db.AppDatabase
 import jp.co.charco.praisesreminder.data.db.PraiseDao
+import jp.co.charco.praisesreminder.data.repository.PraiseRepository
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object PersistenceModule {
+object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(application: Application): AppDatabase {
-        return Room.databaseBuilder(
-            application,
-            AppDatabase::class.java,
-            "app_database"
-        ).addMigrations(AppDatabase.MIGRATION_1_2)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun providePraiseDao(appDatabase: AppDatabase): PraiseDao {
-        return appDatabase.praiseDao()
+    fun providePraiseRepository(praiseDao: PraiseDao): PraiseRepository {
+        return PraiseRepository(praiseDao)
     }
 }

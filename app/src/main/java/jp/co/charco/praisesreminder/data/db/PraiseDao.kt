@@ -7,12 +7,21 @@ import java.time.LocalDate
 
 @Dao
 interface PraiseDao {
-    @Query("SELECT * FROM praise WHERE date = :date")
-    fun getAll(date: LocalDate): Flow<List<Praise>>
+    @Query("SELECT * FROM praise")
+    suspend fun getAll(): List<Praise>
+
+    @Query("SELECT * FROM praise WHERE date = :date ORDER BY order_no")
+    suspend fun getAll(date: LocalDate): List<Praise>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(entity: Praise)
 
     @Delete
     suspend fun delete(entity: Praise)
+
+    @Update
+    suspend fun update(entity: Praise)
+
+    @Query("SELECT MAX(`order_no`) FROM praise WHERE date = :date")
+    suspend fun getMaxOrder(date: LocalDate): Int?
 }

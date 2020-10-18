@@ -18,6 +18,8 @@ data class Praise(
     val id: Int = 0,
     var content: String,
     var date: LocalDate = LocalDate.now(),
+    @ColumnInfo(name = "order_no", defaultValue = UNDECIDED_VALUE.toString())
+    var orderNo: Int = UNDECIDED_VALUE,
     // TODO: insert するタイミングの now を利用したい
     @ColumnInfo(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now()
@@ -26,6 +28,9 @@ data class Praise(
     val dateStr: String = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
 
     companion object {
+        // 未定値
+        const val UNDECIDED_VALUE = -1
+
         fun empty() = Praise(content = "")
     }
 }
