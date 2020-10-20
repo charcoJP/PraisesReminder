@@ -60,7 +60,7 @@ class PraiseListFragment : Fragment() {
 
     private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-        ItemTouchHelper.LEFT,
+        0,
     ) {
         override fun onMove(
             recyclerView: RecyclerView,
@@ -78,6 +78,7 @@ class PraiseListFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
+        override fun isItemViewSwipeEnabled(): Boolean = false
     })
 
     companion object {
