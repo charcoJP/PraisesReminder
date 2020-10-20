@@ -41,5 +41,6 @@ class PraiseListViewModel @ViewModelInject constructor(
 
     fun delete(praise: Praise) = viewModelScope.launch {
         praiseRepository.delete(praise)
+        reloadPraises()
     }
 }
