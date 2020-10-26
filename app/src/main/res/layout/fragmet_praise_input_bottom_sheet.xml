@@ -21,7 +21,7 @@
             android:layout_weight="1"
             android:hint="@string/praises_input_hint"
             android:importantForAutofill="no"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:text="@={praise.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
